@@ -1,6 +1,12 @@
 # brother-mfc-7860dw
 
-This package adapts Brother's legacy RPM driver for the MFC-7860DW. The vendor driver expects its files under `/usr/local/Brother/Printer`, so this package preserves that layout instead of relocating the tree. The vendor installer is not run during packaging; the PPD and CUPS filter are installed as package files. The packaged default RC configuration enables duplex printing and selects Letter paper.
+Fork of the [brother-mfc-7860dw AUR package](https://aur.archlinux.org/packages/brother-mfc-7860dw), with local packaging and driver-configuration changes.
+
+This fixes an issue in the upstream where individual job settings (duplex, DPI, etc.) were not getting applied.  The root cause was a permissions issue on the `brMFC7860DWrc` file.
+
+This package also installs into `/usr/local/Brother/` to match the upstream RPM.  While this does conform to [Arch Package Guidelines](https://manual.archlinux.page/package-guidelines/), it avoids complexity since the upstream RPM hardcodes some paths to `/usr/local`.
+
+The vendor installer is not run during packaging; the PPD and CUPS filter are installed as package files. The packaged default RC configuration enables duplex printing and selects Letter paper.
 
 ## Runtime configuration permissions
 
@@ -11,7 +17,3 @@ The RC file is shared mutable state. Locking is not implemented in this package 
 ## Migration from the old relocated package
 
 If upgrading from a version that used `/usr/share/brother/printer`, check for the manually created compatibility symlink at `/usr/local/Brother/Printer/MFC7860DW`. Remove that symlink before installing this package's real vendor tree at the same path. Verify it is the expected symlink before removing it; do not remove a real directory or unrelated local data.
-
-## Non-printing validation
-
-The helper and wrapper can be exercised as the `cups` user with test PostScript input, sending the wrapper's output to a regular file rather than a CUPS backend. This checks option application and filter output without queuing a job to a physical printer.
