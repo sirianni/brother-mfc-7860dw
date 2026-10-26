@@ -8,6 +8,16 @@ This package also installs into `/usr/local/Brother/` to match the upstream RPM.
 
 The vendor installer is not run during packaging; the PPD and CUPS filter are installed as package files. The packaged default RC configuration enables duplex printing and selects Letter paper.
 
+## Build and install
+
+From the repository directory on Arch Linux, run:
+
+```sh
+makepkg -si
+```
+
+Run `makepkg` as a regular user, not with `sudo`. The `-s` option installs any missing dependencies, and `-i` installs the package after it has been built.
+
 ## Runtime configuration permissions
 
 `brcupsconfig4` applies job options by renaming and rewriting `inf/brMFC7860DWrc`. The package therefore makes that RC file writable by the `cups` group and makes its containing `inf` directory group-writable. The file remains root-owned and is not world-writable.
